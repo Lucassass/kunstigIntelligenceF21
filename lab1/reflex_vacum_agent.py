@@ -40,15 +40,15 @@ def Actuators(action): # Modify Enviroment
     elif action == 'Right' and location == D:
         Enviroment['Current'] = A
 
-def run(n, make_agent): # run the agent through n steps
+def run(n, REFLEX_VACUUM_AGENT): # run the agent through n steps
     print('     Current                       New')
     print('location     status  action  location   status')
     for i in range(1,n):
         (location, status) = Sensors() # Sense Enviroment before action
         print("{:12s}{:8s}".format(location, status), end='')
-        action = make_agent(Sensors())
+        action = REFLEX_VACUUM_AGENT(Sensors())
         Actuators(action)
         (location, status) = Sensors() # Sense Eviroment after action
         print("{:8s}{:12s}{:8s}".format(action, location, status))
 
-run(20,make_agent)
+run(20,REFLEX_VACUUM_AGENT)
