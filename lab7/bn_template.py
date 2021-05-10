@@ -121,6 +121,8 @@ class Variable(object):
 
         # COMPLETE THIS FUNCTION
         # Set self.marginal_probabilities
+        def set_marginal_probabilities(self, val):
+            self.marginal_probabilities = val   
 
         # set this Node`s state to ready
         self.ready = True
@@ -209,10 +211,13 @@ class BayesianNetwork(object):
     # values is dictionary
     def get_joint_probability(self, values):
         """ return the joint probability of the Nodes """
-        pass
         # COMPLETE THIS FUNCTION
-
-        # Return join probability
+        def joint_probability():
+            #TODO get joint probability
+            return joint_probability
+        
+        #return joint probability
+        return self.joint_probability()
 
     def get_conditional_probability(self, values, evidents):
         """ returns the conditional probability.

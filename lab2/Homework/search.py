@@ -1,4 +1,3 @@
-import time
 class Node:  # Node has only PARENT_NODE, STATE, DEPTH
     def __init__(self, state, parent=None, depth=0):
         self.STATE = state
@@ -60,12 +59,15 @@ def INSERT(node, queue):
     return queue
 
 
+
 '''
 Insert list of nodes into the fringe
 '''
 def INSERT_ALL(list, queue):
-    queue.extend(list)
+    for li in list:
+        queue.append(li)
     return queue
+
 
 
 '''
@@ -74,57 +76,49 @@ Removes and returns the first element from fringe
 def REMOVE_FIRST(queue):
     return queue.pop(0)
 
-def safeState(state):
-    if state == GOAL_STATE:
-        return True
-    elif state[1] == state[2] or state[2] == state[3]:
-        return False
-    else: 
-        return True
-   
 '''
 Successor function, mapping the nodes to its successors
 '''
 def successor_fn(state):  # Lookup list of successor states
-    allowedStates = []
-    for newstate in STATE_SPACE[state]:
-        if safeState(newstate):
-            allowedStates.append(newstate)
-    return allowedStates
-    
-INITIAL_STATE = ('W','W','W','W')
+    out = []
+    for stateThing in STATE_SPACE[state]:
+        farmer, wolf, goat, cabbage = stateThing
+        if wolf == goat and wolf != farmer:
+            pass
+        elif goat == cabbage and goat != farmer:
+            pass
+        else:
+            out.append(stateThing)
+    return out
+
+# (farmer, wolf, goat, cabbage)
 GOAL_STATE = ('E','E','E','E')
-STATE_SPACE = {
-    ('W','W','W','W'): [('E','W','W','W'),('E','E','W','W'),('E','W','E','W'),('E','W','W','E')],
-    ('W','W','W','E'): [('E','W','W','E'),('E','E','W','E'),('E','W','E','E')],
-    ('W','W','E','W'): [('E','W','W','E'),('E','E','W','E'),('E','W','E','E')],
-    ('W','E','W','W'): [('E','E','W','W'),('E','E','E','W'),('E','E','W','E')],
-    ('E','W','W','W'): [('W','W','W','W')],
-    ('W','W','E','E'): [('E','W','E','E'),('E','E','E','E')],
-    ('W','E','W','E'): [('E','E','W','E'),('E','E','E','E')],
-    ('W','E','E','W'): [('E','E','E','W'),('E','E','E','E')],
-    ('E','W','W','E'): [('W','W','W','E'),('W','W','W','W')],
-    ('E','E','W','W'): [('W','E','W','W'),('W','W','W','W')],
-    ('E','W','E','W'): [('W','W','E','W'),('W','W','W','W')],
-    ('W','E','E','E'): [('E','E','E','E')],
-    ('E','W','E','E'): [('W','W','E','E'),('W','W','W','E'),('W','W','E','W')],
-    ('E','E','W','E'): [('W','E','W','E'),('W','W','W','E'),('W','E','W','W')],
-    ('E','E','E','W'): [('W','E','E','W'),('W','W','E','W'),('W','E','W','W')],
-    ('E','E','E','E'): [('W','E','E','E'),('W','W','E','E'),('W','E','W','E'),('W','E','E','W')],
-    }
+INITIAL_STATE = ('W','W','W','W')
+STATE_SPACE = {('W','W','W','W') : [('E','W','W','W'),('E','E','W','W'), ('E','W','E','W'), ('E','W','W','E')],
+               ('E','W','W','W') : [('W','W','W','W')],
+               ('E','E','W','W'): [('W','E','W','W'),('W','W','W','W')],
+               ('E','W','E','W'): [('W','W','E','W'),('W','W','W','W')],
+               ('E','W','W','E'): [('W','W','W','E'),('W','W','W','W')], 
+               ('W','E','W','W'): [('E','E','E','W'), ('E','E','W','E'), ('E','E','W','W')],
+               ('W','W','E','W'): [('E','E','E','W'), ('E','W','E','E'), ('E','W','E','W')],
+               ('W','W','W','E'): [('E','E','W','E'), ('E','W','E','E'), ('E','W','W','E')],
+               ('E','E','E','W'): [('W','W','E','W'), ('W','E','W','W'), ('W','E','E','W')],
+               ('E','E','W','E'): [('W','W','W','E'), ('W','E','W','W'), ('W','E','W','E')],
+               ('E','W','E','E'): [('W','W','W','E'), ('W','W','E','W'), ('W','W','E','E')],
+               ('W','E','E','W'): [('E','E','E','E'), ('E','E','E','W')],
+               ('W','E','W','E'): [('E','E','E','E'), ('E','E','W','E')],
+               ('W','W','E','E'): [('E','E','E','E'), ('E','W','E','E')],
+               }
 
 
 '''
 Run tree search and display the nodes in the path to goal node
 '''
 def run():
-    start_time = time.time()
     path = TREE_SEARCH()
     print('Solution path:')
     for node in path:
         node.display()
-    end_time = time.time()
-    print(end_time-start_time)
 
 
 if __name__ == '__main__':

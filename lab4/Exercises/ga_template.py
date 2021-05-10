@@ -47,8 +47,14 @@ def reproduce(mother, father):
     Reproduce two individuals with single-point crossover
     Return the child individual
     '''
-
-    #return child
+    child = []
+    crossover_bit = random.randint(0, 2)
+    for i in range(0, crossover_bit):
+        child.append(mother[i])
+    for i in range(crossover_bit, 3):
+        child.append(father[i])
+    child = (child[0], child[1], child[2])
+    return child
 
 
 def mutate(individual):
@@ -56,8 +62,19 @@ def mutate(individual):
     Mutate an individual by randomly assigning one of its bits
     Return the mutated individual
     '''
-
-    #return mutation
+    mutation = []
+    for i in individual:
+        mutation.append(i)
+    mutated = False
+    while not mutated:
+        randBit = random.randint(0,2)
+        if mutation[randBit] == 0:
+            mutation[randBit] = 1
+            mutated = True
+        elif individual == (1,1,1):
+            mutated = True
+    mutation = (mutation[0], mutation[1], mutation[2])
+    return mutation
 
 
 def random_selection(population, fitness_fn):
@@ -72,10 +89,18 @@ def random_selection(population, fitness_fn):
     # Python sets are randomly ordered. Since we traverse the set twice, we
     # want to do it in the same order. So let's convert it temporarily to a
     # list.
+    selected = []
+
     ordered_population = list(population)
 
-
-    #return selected
+    for ind in ordered_population:
+        if len(selected) < 2:
+            selected.insert(0, ind)
+        elif fitness_fn(ind) >= fitness_fn(selected[0]):
+            selected[1] = selected[0]
+            selected[0] = ind
+    selected = (selected[0], selected[1])
+    return selected
 
 
 def fitness_function(individual):
@@ -90,8 +115,13 @@ def fitness_function(individual):
 
     enumerate(reversed((1, 1, 0))) -> [(0, 0), (1, 1), (2, 1)]
     '''
-
-    #return fitness
+    (1,1,0)
+    fitness = 0
+    fitness = individual[2]
+    fitness += individual[1] * 2
+    fitness += individual[0] * 4
+    
+    return fitness
 
 
 def get_fittest_individual(iterable, func):
@@ -126,5 +156,4 @@ def main():
 
 
 if __name__ == '__main__':
-    pass
-    #main()
+    main()

@@ -12,7 +12,20 @@ class CSP:
         return self.recursive_backtracking({})
 
     def recursive_backtracking(self, assignment):
-        pass
+        if is_complete(self,assignment) == True:
+            return assignment
+        else: 
+            var = select_unassigned_variable(self, assignment)
+            for value in order_domain_values(self, var, assignment):
+                if is_consistent(self, var, value, assignment) == True:
+                        # TODO Here add var to assignment
+                        result = recursive_backtracking(assignment,CSP)
+                        if result! = False: 
+                            return result
+                        # TODO Here remove var from assignment
+            return False
+
+
 
     def select_unassigned_variable(self, assignment):
         for variable in self.variables:

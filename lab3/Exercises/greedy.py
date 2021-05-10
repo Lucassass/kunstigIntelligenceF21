@@ -28,10 +28,17 @@ def TREE_SEARCH():
     fringe = INSERT(initial_node, fringe)
     while fringe is not None:
         node = REMOVE_FIRST(fringe)
-        if node.STATE == GOAL_STATE:
+        if node.STATE == GOAL_STATE[0] or node.STATE == GOAL_STATE[1]:
             return node.path()
+        
         children = EXPAND(node)
-        fringe = INSERT_ALL(children, fringe)
+        lowest = Node(('x', '99999'))
+        for c in children:
+            if c.STATE[1] < lowest.STATE[1]:
+                lowest = c
+        
+
+        fringe = INSERT(lowest, fringe)
         print("fringe: {}".format(fringe))
 
 
@@ -59,12 +66,15 @@ def INSERT(node, queue):
     return queue
 
 
+
 '''
 Insert list of nodes into the fringe
 '''
 def INSERT_ALL(list, queue):
-    queue.extend(list)
+    for li in list:
+        queue.append(li)
     return queue
+
 
 
 '''
@@ -73,20 +83,28 @@ Removes and returns the first element from fringe
 def REMOVE_FIRST(queue):
     return queue.pop(0)
 
-
 '''
 Successor function, mapping the nodes to its successors
 '''
 def successor_fn(state):  # Lookup list of successor states
-    return STATE_SPACE[state]  # successor_fn( 'C' ) returns ['F', 'G']
+    return STATE_SPACE[state]
 
-
-INITIAL_STATE = 'A'
-GOAL_STATE = 'J'
-STATE_SPACE = {'A': ['B', 'C'],
-               'B': ['D', 'E'], 'C': ['F', 'G'],
-               'D': [], 'E': [], 'F': [], 'G': ['H', 'I', 'J'],
-               'H': [], 'I': [], 'J': [], }
+# location, h
+GOAL_STATE = [('K', '0'), ('L', '0')]
+INITIAL_STATE = ('A', '6')
+STATE_SPACE = {('A', '6') : [('B', '5'), ('C', '5'), ('D', '2')],
+               ('B', '5') : [('A', '6'), ('E', '4'), ('F', '5')],
+               ('C', '5') : [('A', '6'), ('E', '4')],
+               ('D', '2') : [('A', '6'), ('H', '1'), ('I', '2'), ('J', '1')],
+               ('E', '4') : [('B', '5'), ('C', '5'), ('G', '4'), ('H', '1')],
+               ('F', '5') : [('B', '5'), ('G', '4')],
+               ('G', '4') : [('F', '5'), ('E', '4'), ('K', '0')],
+               ('H', '1') : [('D', '2'), ('E', '4'), ('K', '0'), ('L', '0')],
+               ('I', '2') : [('D', '2'), ('L', '0')],
+               ('J', '1') : [('D', '2')],
+               ('K', '0') : [('G', '4'), ('H', '1')],
+               ('L', '0') : [('H', '1'), ('I', '2')]
+               }
 
 
 '''
